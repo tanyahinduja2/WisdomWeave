@@ -8,7 +8,7 @@ import Qazi from "../static/qazi.jpg";
 import JSLogo from "../static/jsLogo.png";
 
 const styles = {
-  wrapper: `h-screen min-w-[10rem] max-w-[30rem] flex-[1.2] p-[2rem]`,
+  wrapper: `h-screen min-w-[10rem] max-w-[30rem] flex-[1.2] px-[2rem]`,
   accentedButton: `flex items-center justify-center text-sm bg-black text-white my-[2rem] py-[.6rem] rounded-full`,
   searchBar: `flex items-center gap-[.6rem] h-[2.6rem] border px-[1rem] rounded-full`,
   searchInput: `border-none outline-none bg-none w-full`,

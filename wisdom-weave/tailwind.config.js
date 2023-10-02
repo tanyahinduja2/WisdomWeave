@@ -43,6 +43,8 @@ module.exports = {
       ],
       mediumSerifItalic: ['CharterItalic'],
       mediumSerif: ['Charter'],
+      cursiveTitle: ['cursivePretty'],
+      calligraphy: ['calligraphy']
     },
 
     extend: {

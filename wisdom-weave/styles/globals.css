@@ -12,6 +12,16 @@
   src: url('../assets/charterRegular.ttf');
 }
 
+@font-face {
+  font-family: cursivePretty;
+  src: url('../assets/cursivePretty.ttf');
+}
+
+@font-face {
+  font-family: calligraphy;
+  src: url('../assets/calligraphy.ttf');
+}
+
 html,
 body {
   padding: 0;

@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "firebase": "^10.4.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "react-modal": "^3.16.1"
   },
   "devDependencies": {
     "autoprefixer": "latest",

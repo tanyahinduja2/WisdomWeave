@@ -38,7 +38,8 @@ const UploadModal = () => {
       postedOn: serverTimestamp(),
       postLength: Number(postLength),
       title: title,
-      author: user.name,
+      authorName: currentUser.displayName,
+      authorEmail: currentUser.email,
     })
 
     alert("Post Uploaded")

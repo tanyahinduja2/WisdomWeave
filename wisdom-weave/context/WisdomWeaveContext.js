@@ -78,9 +78,20 @@ const WisdomWeaveProvider = ({ children }) => {
       })
   }
 
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        setCurrentUser(null); 
+        console.log('Logged out');
+      })
+      .catch((error) => {
+        console.error('Error logging out:', error);
+      });
+  };
+
   return (
-    <WisdomWeaveContext.Provider value={{ posts, users, handleUserAuth, currentUser }}>
-      {children}
+    <WisdomWeaveContext.Provider value={{ posts, users, handleUserAuth, currentUser, handleLogout }}>
+      { children }
     </WisdomWeaveContext.Provider>
   );
 };

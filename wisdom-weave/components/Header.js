@@ -37,16 +37,9 @@ const styles = {
 };
 
 const Header = () => {
-  const { currentUser, handleUserAuth, users } = useContext(WisdomWeaveContext);
+  const { currentUser, handleUserAuth, handleLogout } = useContext(WisdomWeaveContext);
 
   const router = useRouter();
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   return (
     <div className={styles.wrapper}>
@@ -64,9 +57,7 @@ const Header = () => {
             </Link>
             <div
               className={styles.accentedButton}
-              onClick={() => {
-                signOut(auth);
-              }}
+              onClick={handleLogout}
             >
               Log Out
             </div>

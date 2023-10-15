@@ -6,8 +6,7 @@ import Modal from "react-modal";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import UploadModal from "./UploadModal";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { AiOutlineSearch } from "react-icons/ai";
 
 Modal.setAppElement("#__next");
 
@@ -34,40 +33,59 @@ const styles = {
   mainTitle: "font-calligraphy text-[2.8rem] pt-[0.1rem]",
   bannerNav: "flex cursor-pointer space-x-5 items-center",
   accentedButton: "bg-[#10368E] text-white py-2 px-5 rounded-full",
+  searchBar:
+    "flex items-center gap-[.6rem] h-[2.6rem] border-2 border-[#10368E] px-[1rem] rounded-full",
+  searchInput:
+    "border-none outline-none bg-[#CEE6F3] w-full text-[#10368E] font-semibold",
+  searchIcon: "text-[#10368E] font-semibold",
 };
 
 const Header = () => {
-  const { currentUser, handleUserAuth, handleLogout } = useContext(WisdomWeaveContext);
-
+  const { currentUser, handleUserAuth, handleLogout, searchQuery, setSearchQuery } = useContext(WisdomWeaveContext);
   const router = useRouter();
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
         <div className={styles.logoContainer}>
-          <Image src={smallLogo} height={50} width={50}/>
+          <Image src={smallLogo} height={50} width={50} />
           <h1 className={styles.mainTitle}>WisdomWeave</h1>
         </div>
         {currentUser ? (
           <div className={styles.bannerNav}>
-            <div>Our Story</div>
-            <div>Membership</div>
+            <div className={styles.searchBar}>
+          <input
+            onChange={(e) => setSearchQuery(e.target.value)} 
+            value={searchQuery} 
+            className={styles.searchInput}
+            placeholder="Search"
+            type="text"
+          />
+          <button type="submit">
+            <AiOutlineSearch className={styles.searchIcon} />
+          </button>
+        </div>
             <Link href={"?addNew=1"}>
               <div className={styles.accentedButton}>Write</div>
             </Link>
-            <div
-              className={styles.accentedButton}
-              onClick={handleLogout}
-            >
+            <div className={styles.accentedButton} onClick={handleLogout}>
               Log Out
             </div>
           </div>
         ) : (
           <div className={styles.bannerNav}>
-            <div>Our Story</div>
-            <div>Membership</div>
-            <div onClick={handleUserAuth}>Sign In</div>
-            <div className={styles.accentedButton}>Get Started</div>
+            {/* <div className={styles.searchBar}>
+              <input
+                onChange={() => {setSearch(e.target.value)}}
+                className={styles.searchInput}
+                placeholder="Search"
+                type="text"
+              />
+              <button type="submit">
+                <AiOutlineSearch className={styles.searchIcon} />
+              </button>
+            </div> */}
+            <div onClick={handleUserAuth} className={styles.accentedButton}>Sign In</div>
           </div>
         )}
       </div>

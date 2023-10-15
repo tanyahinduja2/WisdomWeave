@@ -31,6 +31,11 @@ const styles = {
 const ArticleMain = ({ post, author }) => {
   console.log(post, author);
   console.log(author.data?.imageURL);
+
+  const renderQuillContent = (htmlContent) => {
+    return { __html: htmlContent };
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
@@ -94,7 +99,10 @@ const ArticleMain = ({ post, author }) => {
             </div>
             <div>Brief: {post.data?.brief}</div>
           </h4>
-          <div className={styles.articleText}>{post.data?.body}</div>
+          <div
+            className={styles.articleText}
+            dangerouslySetInnerHTML={renderQuillContent(post.data?.body)}
+          />
         </div>
       </div>
     </div>

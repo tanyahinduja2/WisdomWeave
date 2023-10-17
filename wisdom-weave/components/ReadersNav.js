@@ -7,6 +7,8 @@ import { BiBookmarks } from "react-icons/bi";
 import { RiArticleLine } from "react-icons/ri";
 import { BsPencilSquare } from "react-icons/bs";
 import Qazi from "../static/qazi.jpg";
+import { useContext } from "react";
+import { WisdomWeaveContext } from "@/context/WisdomWeaveContext";
 
 const styles = {
   wrapper: `w-[5rem] h-screen flex flex-col justify-between items-center p-[1rem]`,
@@ -18,6 +20,16 @@ const styles = {
 };
 
 const ReadersNav = () => {
+  const {
+    currentUser,
+    handleUserAuth,
+    users,
+  } = useContext(WisdomWeaveContext);
+
+  console.log(currentUser.email)
+
+  const userProfile = users.find((user) => user.data.email === currentUser.email);
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -27,20 +39,32 @@ const ReadersNav = () => {
           </div>
         </Link>
         <div className={styles.iconsContainer}>
-          <HiOutlineHome />
-          <FiBell />
+          <Link href="/">
+            <HiOutlineHome />
+          </Link>
+          {/* <FiBell /> */}
           <BiBookmarks />
           <RiArticleLine />
           <div className={styles.divider} />
-          <BsPencilSquare />
+          {currentUser ? (
+            <Link href={"/?addNew=1"}>
+              <BsPencilSquare />
+            </Link>
+          ) : (
+            <BsPencilSquare onClick={handleUserAuth} style={{cursor: "pointer"}}/>
+          )}
         </div>
         <div className={styles.profileImageContainer}>
-        <Image
-          className={styles.profileImage}
-          src={Qazi}
-          alt='profile image icons'
-        />
-      </div>
+          {currentUser ? (
+              <Image
+                className={styles.profileImage}
+                src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${userProfile?.data?.imageURL}`}
+                alt="profile image"
+                width={100}
+                height={100}
+              />
+          ) : null}
+        </div>
       </div>
     </>
   );

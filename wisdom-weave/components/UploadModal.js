@@ -1,16 +1,14 @@
-import React, { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
-import { WisdomWeaveContext } from '../context/WisdomWeaveContext';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
+import { WisdomWeaveContext } from "../context/WisdomWeaveContext";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
 
-// Import Quill dynamically on the client side
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css'; // Ensure this import is outside the dynamic import
-
-const ReactQuill = dynamic(() => import('react-quill'), {
-  loading: () => <p>Loading editor...</p>, // You can customize the loading UI
-  ssr: false, // This ensures that it's not loaded during server-side rendering
+const ReactQuill = dynamic(() => import("react-quill"), {
+  loading: () => <p>Loading editor...</p>,
+  ssr: false,
 });
 
 const styles = {
@@ -26,46 +24,46 @@ const styles = {
 
 const quillModules = {
   toolbar: [
-    [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ 'color': [] }, { 'background': [] }],
-    ['link'],
-    ['clean'],
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ color: [] }, { background: [] }],
+    ["link"],
+    ["clean"],
   ],
 };
 
 const quillFormats = [
-  'header',
-  'font',
-  'list',
-  'bullet',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'color',
-  'background',
-  'link',
-  'clean',
+  "header",
+  "font",
+  "list",
+  "bullet",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "color",
+  "background",
+  "link",
+  "clean",
 ];
 
 const UploadModal = () => {
   const router = useRouter();
   const { currentUser } = useContext(WisdomWeaveContext);
 
-  const [title, setTitle] = useState('');
-  const [brief, setBrief] = useState('');
-  const [category, setCategory] = useState('');
-  const [postLength, setPostLength] = useState('');
-  const [bannerImage, setBannerImage] = useState('');
-  const [body, setBody] = useState('');
+  const [title, setTitle] = useState("");
+  const [brief, setBrief] = useState("");
+  const [category, setCategory] = useState("");
+  const [postLength, setPostLength] = useState("");
+  const [bannerImage, setBannerImage] = useState("");
+  const [body, setBody] = useState("");
 
   const uploadPost = async (event) => {
     event.preventDefault();
 
-    await addDoc(collection(db, 'articles'), {
+    await addDoc(collection(db, "articles"), {
       bannerImage: bannerImage,
       body: body,
       category: category,
@@ -77,8 +75,8 @@ const UploadModal = () => {
       authorEmail: currentUser.email,
     });
 
-    alert('Post Uploaded');
-    router.push('/');
+    alert("Post Uploaded");
+    router.push("/");
   };
 
   return (

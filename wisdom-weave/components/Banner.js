@@ -16,10 +16,10 @@ const Banner = () => {
       <div className={styles.content}>
         <div className="space-y-5 px-10 py-10 flex-[3]">
           <h1 className="max-w-xm text-[6rem] font-mediumSerif">
-            Stay Curious.
+            Ideas Unboxed.
           </h1>
           <h3 className="text-2xl">
-            Discover stories, thinking, and expertise from writers on any topic.
+            Dive into the world of ideas.
           </h3>
           {currentUser ? (
             <button className={styles.accentedButton}>

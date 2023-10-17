@@ -28,11 +28,13 @@ const Post = () => {
         }
     }, [posts, router.query.slug, users])
 
+    const filteredPosts = posts.filter(p => p.id !== post.id);
+
     return (
         <div className={styles.content}>
             <ReadersNav />
             <ArticleMain post={post} author={author}/>
-            <Recommendations />
+            <Recommendations author={author} filteredPosts={filteredPosts}/>
         </div>
     )
 }

@@ -1,11 +1,9 @@
 import Image from "next/image";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdMarkEmailUnread } from "react-icons/md";
-import ReplitLogo from "../static/replit.png";
-import TutorialImg from "../static/tutorial.jpg";
-import CPLogo from "../static/cp.png";
-import Qazi from "../static/qazi.jpg";
-import JSLogo from "../static/jsLogo.png";
+import { useState, useContext } from "react";
+import { WisdomWeaveContext } from "../context/WisdomWeaveContext";
+import Link from "next/link";
 
 const styles = {
   wrapper: `h-screen min-w-[10rem] max-w-[30rem] flex-[1.2] px-[2rem]`,
@@ -31,58 +29,73 @@ const styles = {
   recommendationThumbnail: `object-cover`,
 };
 
-const Recommendations = ({ author }) => {
+const Recommendations = ({ author, filteredPosts }) => {
+  const { posts } = useContext(WisdomWeaveContext);
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.accentedButton}>Get Unlimited Access</div>
-      <div className={styles.searchBar}>
-        <AiOutlineSearch />
-        <input
-          className={styles.searchInput}
-          placeholder="Search"
-          type="text"
-        />
-      </div>
 
       <div className={styles.authorContainer}>
         <div className={styles.authorProfileImageContainer}>
-          <Image src={Qazi} height={100} width={100} />
+          <Image
+            src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
+            height={100}
+            width={100}
+          />
         </div>
-        <div className={styles.authorName}>Tanya Hinduja</div>
-        <div className={styles.authorFollowing}>1M followers</div>
-        <div className={styles.authorActions}>
+        <div className={styles.authorName}>{author.data?.name}</div>
+        <div className={styles.authorFollowing}>
+          {author.data?.followerCount} Followers
+        </div>
+        {/* <div className={styles.authorActions}>
           <button className={styles.actionButton}>Follow</button>
           <button className={styles.actionButton}>
             <MdMarkEmailUnread />
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div className={styles.recommendationContainer}>
-        <div className={styles.title}>More from Medium</div>
+        <div className={styles.title}>More from {author.data?.name}</div>
         <div className={styles.articlesContainer}>
-          {recommendedPosts.map((post) => (
-            <div className={styles.articleContentWrapper}>
-              <div className={styles.articleContent}>
-                <div className={styles.recommendationAuthorContainer}>
-                  <div
-                    className={styles.recommendationAuthorProfileImageContainer}
-                  >
-                    <Image src={post.author.image} height={100} width={100} />
+          {filteredPosts
+            .filter((post) => post.data.authorEmail === author.data?.email)
+            .map((post) => (
+              <div className={styles.articleContentWrapper} key={post.id}>
+                <div className={styles.articleContent}>
+                  <div className={styles.recommendationAuthorContainer}>
+                    <div
+                      className={
+                        styles.recommendationAuthorProfileImageContainer
+                      }
+                    >
+                      <Image
+                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
+                        alt="author image"
+                        height={100}
+                        width={100}
+                      />
+                    </div>
+                    <div className={styles.recommendationAuthorName}>
+                      {author.data?.name}
+                    </div>
                   </div>
-                  <div className={styles.recommendationAuthorName}>
-                    {post.author.name}
-                  </div>
+                  <Link href={`/post/${post.id}`} as={`/post/${post.id}`}>
+                    <div className={styles.recommendationTitle}>
+                      {post.data.title}
+                    </div>
+                  </Link>
                 </div>
-                <div className={styles.recommendationTitle}>
-                  {post.title}
+                <div className={styles.recommendationThumbnailContainer}>
+                  <Image
+                    src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.data.bannerImage}`}
+                    height={100}
+                    width={100}
+                    alt="thumbnail"
+                  />
                 </div>
               </div>
-              <div className={styles.recommendationThumbnailContainer}>
-                <Image src={post.image} height={100} width={100} />
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
@@ -90,30 +103,3 @@ const Recommendations = ({ author }) => {
 };
 
 export default Recommendations;
-
-const recommendedPosts = [
-  {
-    title: "What can you do with Replit?",
-    image: ReplitLogo,
-    author: {
-      name: "Clever Programmer",
-      image: CPLogo,
-    },
-  },
-  {
-    title: "The Ultimate JavaScript Course for Beginners by Clever Programmer",
-    image: TutorialImg,
-    author: {
-      name: "Rafeh Qazi",
-      image: Qazi,
-    },
-  },
-  {
-    title: "How to Become a Developer in 2022?",
-    image: JSLogo,
-    author: {
-      name: "Clever Programmer",
-      image: CPLogo,
-    },
-  },
-];

@@ -23,7 +23,7 @@ const alertMessageStyle = {
   margin: "10px 0",
 };
 
-const MAX_POSTS_TO_DISPLAY = 2;
+const MAX_POSTS_TO_DISPLAY = 3;
 
 export default function Home() {
   const {
@@ -37,7 +37,7 @@ export default function Home() {
   } = useContext(WisdomWeaveContext);
 
   const filteredPosts = posts.filter((post) => {
-    const postText = post.data.title + post.data.brief;
+    const postText = post.data.title + post.data.brief + post.data.category;
     return postText.toLowerCase().includes(searchQuery.toLowerCase());
   });
 

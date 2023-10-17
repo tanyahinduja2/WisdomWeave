@@ -56,9 +56,9 @@ const PostCard = ({ post }) => {
                 • {post.data.postLength} min read •{" "}
                 <span className={styles.category}>{post.data.category}</span>
               </span>
-              <span className={styles.bookmarkContainer}>
+              {/* <span className={styles.bookmarkContainer}>
                 <FiBookmark className="w-5 h-5" />
-              </span>
+              </span> */}
             </div>
           </div>
           <div className={styles.thumbnailContainer}>

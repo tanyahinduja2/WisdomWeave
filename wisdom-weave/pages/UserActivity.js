@@ -4,11 +4,13 @@ import { db } from "../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import Header from "../components/Header";
 import { doc, deleteDoc } from "firebase/firestore";
+import Image from "next/image";
+
+const styles = {}
 
 const handleDeletePost = async (postId) => {
   try {
     await deleteDoc(doc(db, "posts", postId));
-    // Update the userPosts state to remove the deleted post
     setUserPosts(userPosts.filter((post) => post.id !== postId));
   } catch (error) {
     console.error("Error deleting post:", error);
@@ -18,7 +20,6 @@ const handleDeletePost = async (postId) => {
 const handleDeleteComment = async (commentId) => {
   try {
     await deleteDoc(doc(db, "comments", commentId));
-    // Update the userComments state to remove the deleted comment
     setUserComments(userComments.filter((comment) => comment.id !== commentId));
   } catch (error) {
     console.error("Error deleting comment:", error);
@@ -100,6 +101,14 @@ const UserActivity = () => {
             {userPosts.map((post) => (
               <div key={post.id}>
                 <p>{post.title}</p>
+                <div className={styles.recommendationThumbnailContainer}>
+                      <Image
+                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.bannerImage}`}
+                        height={100}
+                        width={100}
+                        alt="thumbnail"
+                      />
+                    </div>
                 {currentUser && (
                   <button onClick={() => handleDeletePost(post.id)}>
                     Delete Post

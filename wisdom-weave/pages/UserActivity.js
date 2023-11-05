@@ -6,11 +6,12 @@ import Header from "../components/Header";
 import { doc, deleteDoc } from "firebase/firestore";
 import Image from "next/image";
 
-const styles = {}
+const styles = {};
 
 const handleDeletePost = async (postId) => {
+  console.log(postId);
   try {
-    await deleteDoc(doc(db, "posts", postId));
+    await deleteDoc(doc(db, "articles", postId));
     setUserPosts(userPosts.filter((post) => post.id !== postId));
   } catch (error) {
     console.error("Error deleting post:", error);
@@ -20,7 +21,9 @@ const handleDeletePost = async (postId) => {
 const handleDeleteComment = async (commentId) => {
   try {
     await deleteDoc(doc(db, "comments", commentId));
-    setUserComments(userComments.filter((comment) => comment.id !== commentId));
+    setUserComments((comments) =>
+      comments.filter((comment) => comment.id !== commentId)
+    );
   } catch (error) {
     console.error("Error deleting comment:", error);
   }
@@ -45,7 +48,7 @@ const UserActivity = () => {
           const posts = [];
 
           postsSnapshot.forEach((doc) => {
-            posts.push(doc.data());
+            posts.push(doc);
           });
 
           setUserPosts(posts);
@@ -65,7 +68,7 @@ const UserActivity = () => {
           const comments = [];
 
           commentsSnapshot.forEach((doc) => {
-            comments.push(doc.data());
+            comments.push(doc);
           });
 
           setUserComments(comments);
@@ -90,47 +93,68 @@ const UserActivity = () => {
   return (
     <div>
       <Header />
-      <h1>User Activity</h1>
+      <h1 className="text-2xl font-semibold m-6">User Activity</h1>
 
       {isLoading && <div>Loading...</div>}
 
       {!isLoading && currentUser ? (
-        <div>
-          <h2>Posts Authored by {currentUser.displayName}</h2>
-          <ul>
-            {userPosts.map((post) => (
-              <div key={post.id}>
-                <p>{post.title}</p>
-                <div className={styles.recommendationThumbnailContainer}>
-                      <Image
-                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.bannerImage}`}
-                        height={100}
-                        width={100}
-                        alt="thumbnail"
-                      />
-                    </div>
-                {currentUser && (
-                  <button onClick={() => handleDeletePost(post.id)}>
-                    Delete Post
-                  </button>
-                )}
-              </div>
-            ))}
-          </ul>
+        <div className="flex justify-space-between gap-[4rem]">
+          <div className="flex flex-col">
+            <h2 className="text-xl font-semibold m-4">
+              Posts Authored by {currentUser.displayName}
+            </h2>
+            <ul>
+              {userPosts.map((post) => (
+                <div key={post.id} className="border p-4 m-4">
+                  <p className="text-lg">{post.data().title}</p>
+                  <div className="mt-2">
+                    <Image
+                      src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${
+                        post.data().bannerImage
+                      }`}
+                      height={100}
+                      width={100}
+                      alt="thumbnail"
+                    />
+                  </div>
+                  {currentUser && (
+                    <button
+                      className="bg-red-500 text-white py-2 px-4 rounded mt-2"
+                      onClick={() => {
+                        handleDeletePost(post.id);
+                      }}
+                    >
+                      Delete Post
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ul>
+          </div>
 
-          <h2>Comments Made by {currentUser.displayName}</h2>
-          <ul>
-            {userComments.map((comment) => (
-              <div key={comment.id}>
-                <p>{comment.text}</p>
-                {currentUser && (
-                  <button onClick={() => handleDeleteComment(comment.id)}>
-                    Delete Comment
-                  </button>
-                )}
-              </div>
-            ))}
-          </ul>
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold m-4">
+              Comments Made by {currentUser.displayName}
+            </h2>
+            <ul>
+              {userComments.map((comment) => (
+                <div key={comment.id} className="border p-4 m-4">
+                  <p className="text-lg">{comment.data().text}</p>
+                  {currentUser && (
+                    <button
+                      className="bg-red-500 text-white py-2 px-4 rounded mt-2"
+                      onClick={() => {
+                        console.log("comment:", comment.id);
+                        handleDeleteComment(comment.id);
+                      }}
+                    >
+                      Delete Comment
+                    </button>
+                  )}
+                </div>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : (
         <div>Please log in to view your user activity.</div>

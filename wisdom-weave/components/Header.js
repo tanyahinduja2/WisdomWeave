@@ -43,8 +43,6 @@ const styles = {
   userImage: `p-0`,
 };
 
-
-
 const Header = () => {
   const {
     currentUser,
@@ -56,7 +54,7 @@ const Header = () => {
   const router = useRouter();
 
   const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
-  
+
   const toggleUserDropdown = () => {
     setUserDropdownOpen(!isUserDropdownOpen);
   };
@@ -65,8 +63,10 @@ const Header = () => {
     <div className={styles.wrapper}>
       <div className={styles.content}>
         <div className={styles.logoContainer}>
-          <Image src={smallLogo} height={50} width={50} />
-          <h1 className={styles.mainTitle}>WisdomWeave</h1>
+            <Image src={smallLogo} height={50} width={50} />
+          <Link href={"/"}>
+            <h1 className={styles.mainTitle}>WisdomWeave</h1>
+          </Link>
         </div>
         {currentUser ? (
           <div className={styles.bannerNav}>
@@ -89,9 +89,7 @@ const Header = () => {
               Log Out
             </div> */}
             <div className="relative">
-              <button
-                onClick={toggleUserDropdown}
-              >
+              <button onClick={toggleUserDropdown}>
                 <div className={styles.userImageContainer}>
                   <Image
                     className={styles.userImage}

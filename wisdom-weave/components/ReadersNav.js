@@ -6,7 +6,6 @@ import { FiBell } from "react-icons/fi";
 import { BiBookmarks } from "react-icons/bi";
 import { RiArticleLine } from "react-icons/ri";
 import { BsPencilSquare } from "react-icons/bs";
-import Qazi from "../static/qazi.jpg";
 import { useContext } from "react";
 import { WisdomWeaveContext } from "@/context/WisdomWeaveContext";
 
@@ -41,8 +40,8 @@ const ReadersNav = () => {
             <HiOutlineHome />
           </Link>
           {/* <FiBell /> */}
-          <BiBookmarks />
-          <RiArticleLine />
+          {/* <BiBookmarks />
+          <RiArticleLine /> */}
           <div className={styles.divider} />
           {currentUser ? (
             <Link href={"/?addNew=1"}>

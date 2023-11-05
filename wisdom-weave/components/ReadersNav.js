@@ -26,9 +26,7 @@ const ReadersNav = () => {
     users,
   } = useContext(WisdomWeaveContext);
 
-  console.log(currentUser.email)
-
-  const userProfile = users.find((user) => user.data.email === currentUser.email);
+  const userProfile = users.find((user) => user.data.email === currentUser?.email);
 
   return (
     <>

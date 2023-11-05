@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdMarkEmailUnread } from "react-icons/md";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { WisdomWeaveContext } from "../context/WisdomWeaveContext";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import Comment from "./Comment";
 import Link from "next/link";
 
 const styles = {
@@ -17,24 +19,27 @@ const styles = {
   authorActions: `flex gap-[.6rem] my-[1rem]`,
   actionButton: `bg-[#1A8917] text-white rounded-full px-[.6rem] py-[.4rem] text-sm`,
   recommendationContainer: ``,
-  title: `my-[1rem]`,
+  title: `my-[1rem] font-bold text-xl`,
   articlesContainer: ``,
   articleContentWrapper: `flex items-center justify-between cursor-pointer my-[1rem]`,
   articleContent: `flex-[4]`,
   recommendationAuthorContainer: `flex items-center gap-[.6rem]`,
   recommendationAuthorProfileImageContainer: `rounded-full overflow-hidden h-[1.4rem] w-[1.4rem]`,
   recommendationAuthorName: `text-sm`,
-  recommendationTitle: `font-bold`,
+  recommendationTitle: ``,
   recommendationThumbnailContainer: `flex flex-1 items-center justify-center h-[4rem] w-[4rem]`,
   recommendationThumbnail: `object-cover`,
 };
 
-const Recommendations = ({ author, filteredPosts }) => {
-  const { posts } = useContext(WisdomWeaveContext);
+const Recommendations = ({ author, filteredPosts, post }) => {
+  const { currentUser } = useContext(WisdomWeaveContext);
+
+  const authorPosts = filteredPosts.filter(
+    (post) => post.data.authorEmail === author.data?.email
+  );
 
   return (
     <div className={styles.wrapper}>
-
       <div className={styles.authorContainer}>
         <div className={styles.authorProfileImageContainer}>
           <Image
@@ -44,58 +49,68 @@ const Recommendations = ({ author, filteredPosts }) => {
           />
         </div>
         <div className={styles.authorName}>{author.data?.name}</div>
-        <div className={styles.authorFollowing}>
+        {/* <div className={styles.authorFollowing}>
           {author.data?.followerCount} Followers
-        </div>
+        </div> */}
         {/* <div className={styles.authorActions}>
           <button className={styles.actionButton}>Follow</button>
           <button className={styles.actionButton}>
             <MdMarkEmailUnread />
-          </button>
+        `  </button>
         </div> */}
       </div>
 
       <div className={styles.recommendationContainer}>
-        <div className={styles.title}>More from {author.data?.name}</div>
-        <div className={styles.articlesContainer}>
-          {filteredPosts
-            .filter((post) => post.data.authorEmail === author.data?.email)
-            .map((post) => (
-              <div className={styles.articleContentWrapper} key={post.id}>
-                <div className={styles.articleContent}>
-                  <div className={styles.recommendationAuthorContainer}>
-                    <div
-                      className={
-                        styles.recommendationAuthorProfileImageContainer
-                      }
-                    >
+        {authorPosts.length === 0
+          ? null
+          : authorPosts.map((post) => (
+              <div>
+                <div className={styles.title}>
+                  More from {author.data?.name}
+                </div>
+                <div className={styles.articlesContainer}>
+                  <div className={styles.articleContentWrapper} key={post.id}>
+                    <div className={styles.articleContent}>
+                      <div className={styles.recommendationAuthorContainer}>
+                        <div
+                          className={
+                            styles.recommendationAuthorProfileImageContainer
+                          }
+                        >
+                          <Image
+                            src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
+                            alt="author image"
+                            height={100}
+                            width={100}
+                          />
+                        </div>
+                        <div className={styles.recommendationAuthorName}>
+                          {author.data?.name}
+                        </div>
+                      </div>
+                      <Link href={`/post/${post.id}`} as={`/post/${post.id}`}>
+                        <div className={styles.recommendationTitle}>
+                          {post.data.title}
+                        </div>
+                      </Link>
+                    </div>
+                    <div className={styles.recommendationThumbnailContainer}>
                       <Image
-                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
-                        alt="author image"
+                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.data.bannerImage}`}
                         height={100}
                         width={100}
+                        alt="thumbnail"
                       />
                     </div>
-                    <div className={styles.recommendationAuthorName}>
-                      {author.data?.name}
-                    </div>
                   </div>
-                  <Link href={`/post/${post.id}`} as={`/post/${post.id}`}>
-                    <div className={styles.recommendationTitle}>
-                      {post.data.title}
-                    </div>
-                  </Link>
-                </div>
-                <div className={styles.recommendationThumbnailContainer}>
-                  <Image
-                    src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.data.bannerImage}`}
-                    height={100}
-                    width={100}
-                    alt="thumbnail"
-                  />
                 </div>
               </div>
             ))}
+        <div className={styles.commentsContainer}>
+          <div className={styles.title}>
+            Comments
+          </div>
+          <Comment postId={post.id} currentUser={currentUser} />
         </div>
       </div>
     </div>

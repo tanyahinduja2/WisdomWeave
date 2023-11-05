@@ -14,11 +14,11 @@ const Banner = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
-        <div className="space-y-5 px-10 py-10 flex-[3]">
+        <div className="space-y-3 px-10 py-10 flex-[3]">
           <h1 className="max-w-xm text-[6rem] font-mediumSerif">
             Ideas Unboxed.
           </h1>
-          <h3 className="text-2xl">
+          <h3 className="text-4xl pb-[3rem]">
             Dive into the world of ideas.
           </h3>
           {currentUser ? (

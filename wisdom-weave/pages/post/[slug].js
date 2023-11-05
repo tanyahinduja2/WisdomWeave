@@ -25,8 +25,10 @@ const Post = () => {
         if (selectedPost) {
             setPost(selectedPost)
             setAuthor(users.find(user => user.id === selectedPost.data.authorEmail))
+        } else {
+            console.log("Selected post not found:", router.query.slug);
         }
-    }, [posts, router.query.slug, users])
+    }, [posts, router.query.slug, users]);
 
     const filteredPosts = posts.filter(p => p.id !== post.id);
 
@@ -34,7 +36,7 @@ const Post = () => {
         <div className={styles.content}>
             <ReadersNav />
             <ArticleMain post={post} author={author}/>
-            <Recommendations author={author} filteredPosts={filteredPosts}/>
+            <Recommendations author={author} filteredPosts={filteredPosts} post={post} />
         </div>
     )
 }

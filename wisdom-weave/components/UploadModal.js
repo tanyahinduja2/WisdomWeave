@@ -5,6 +5,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
+import SpeechToTextButton from "./SpeechToTextButton";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   loading: () => <p>Loading editor...</p>,
@@ -20,6 +21,7 @@ const styles = {
   inputContainer: `flex-[5] h-min border-2 border-[#787878]`,
   inputField: `w-full border-0 outline-none bg-transparent`,
   accentedButton: `bg-black text-white py-2 px-4 rounded-full`,
+  articleText: `flex-1`,
 };
 
 const quillModules = {
@@ -60,8 +62,27 @@ const UploadModal = () => {
   const [bannerImage, setBannerImage] = useState("");
   const [body, setBody] = useState("");
 
+  const forbiddenWords = [
+    "curseword1",
+    "curseword2",
+    "sensitiveword1",
+    "sensitiveword2",
+  ];
+
+  const containsForbiddenWords = (text) => {
+    const regex = new RegExp(forbiddenWords.join("|"), "i");
+    return regex.test(text);
+  };
+
   const uploadPost = async (event) => {
     event.preventDefault();
+
+    if (containsForbiddenWords(body)) {
+      alert(
+        "Your post contains forbidden words. Please remove them before uploading."
+      );
+      return;
+    }
 
     await addDoc(collection(db, "articles"), {
       bannerImage: bannerImage,
@@ -77,6 +98,10 @@ const UploadModal = () => {
 
     alert("Post Uploaded");
     router.push("/");
+  };
+
+  const handleSpeechResult = (transcript) => {
+    setBody((prevBody) => prevBody + " " + transcript);
   };
 
   return (
@@ -139,9 +164,18 @@ const UploadModal = () => {
           />
         </span>
       </div>
+      {/* <div className={styles.smallField}>
+        <span className={styles.fieldTitle}>Speech-to-Text</span>
+      </div> */}
 
-      <div className={styles.smallField}>
-        <span className={styles.fieldTitle}>Article Text</span>
+      <div className="flex flex-row w-full">
+        <div className="flex flex-col gap-[1rem] ml-[3.5rem]">
+        <span className="">Article Text</span>
+        <span className="px-4">
+          <SpeechToTextButton onSpeechResult={handleSpeechResult} />
+        </span>
+
+        </div>
         <span className={styles.inputContainer}>
           <ReactQuill
             value={body}
@@ -153,7 +187,6 @@ const UploadModal = () => {
           />
         </span>
       </div>
-
       <button onClick={uploadPost} className={styles.accentedButton}>
         Submit
       </button>

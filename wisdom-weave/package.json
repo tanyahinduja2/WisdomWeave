@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "firebase": "^10.4.0",
+    "@firebase/firestore": "^4.3.2",
+    "firebase": "^10.5.2",
     "next": "latest",
     "quill-delta-to-html": "^0.12.1",
     "react": "latest",

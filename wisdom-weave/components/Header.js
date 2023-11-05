@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import UploadModal from "./UploadModal";
 import { AiOutlineSearch } from "react-icons/ai";
+import UserDropdown from "./UserDropdown";
 
 Modal.setAppElement("#__next");
 
@@ -38,11 +39,27 @@ const styles = {
   searchInput:
     "border-none outline-none bg-[#CEE6F3] w-full text-[#10368E] font-semibold",
   searchIcon: "text-[#10368E] font-semibold",
+  userImageContainer: `w-[2.4rem] h-[2.4rem] rounded-full overflow-hidden border-2 border-[#10368E]`,
+  userImage: `p-0`,
 };
 
+
+
 const Header = () => {
-  const { currentUser, handleUserAuth, handleLogout, searchQuery, setSearchQuery } = useContext(WisdomWeaveContext);
+  const {
+    currentUser,
+    handleUserAuth,
+    handleLogout,
+    searchQuery,
+    setSearchQuery,
+  } = useContext(WisdomWeaveContext);
   const router = useRouter();
+
+  const [isUserDropdownOpen, setUserDropdownOpen] = useState(false);
+  
+  const toggleUserDropdown = () => {
+    setUserDropdownOpen(!isUserDropdownOpen);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -54,29 +71,9 @@ const Header = () => {
         {currentUser ? (
           <div className={styles.bannerNav}>
             <div className={styles.searchBar}>
-          <input
-            onChange={(e) => setSearchQuery(e.target.value)} 
-            value={searchQuery} 
-            className={styles.searchInput}
-            placeholder="Search"
-            type="text"
-          />
-          <button type="submit">
-            <AiOutlineSearch className={styles.searchIcon} />
-          </button>
-        </div>
-            <Link href={"?addNew=1"}>
-              <div className={styles.accentedButton}>Write</div>
-            </Link>
-            <div className={styles.accentedButton} onClick={handleLogout}>
-              Log Out
-            </div>
-          </div>
-        ) : (
-          <div className={styles.bannerNav}>
-            {/* <div className={styles.searchBar}>
               <input
-                onChange={() => {setSearch(e.target.value)}}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchQuery}
                 className={styles.searchInput}
                 placeholder="Search"
                 type="text"
@@ -84,8 +81,35 @@ const Header = () => {
               <button type="submit">
                 <AiOutlineSearch className={styles.searchIcon} />
               </button>
+            </div>
+            <Link href={"?addNew=1"}>
+              <div className={styles.accentedButton}>Write</div>
+            </Link>
+            {/* <div className={styles.accentedButton} onClick={handleLogout}>
+              Log Out
             </div> */}
-            <div onClick={handleUserAuth} className={styles.accentedButton}>Sign In</div>
+            <div className="relative">
+              <button
+                onClick={toggleUserDropdown}
+              >
+                <div className={styles.userImageContainer}>
+                  <Image
+                    className={styles.userImage}
+                    src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${currentUser.photoURL}`}
+                    alt="author"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </button>
+              {isUserDropdownOpen && <UserDropdown />}
+            </div>
+          </div>
+        ) : (
+          <div className={styles.bannerNav}>
+            <div onClick={handleUserAuth} className={styles.accentedButton}>
+              Sign In
+            </div>
           </div>
         )}
       </div>

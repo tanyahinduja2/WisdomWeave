@@ -5,8 +5,16 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import Header from "../components/Header";
 import { doc, deleteDoc } from "firebase/firestore";
 import Image from "next/image";
+import { BiUnderline } from "react-icons/bi";
 
-const styles = {};
+const styles = {
+  customUnderline: {
+    borderBottom: "2px solid black", // Increase the border thickness
+    paddingBottom: "5px", // Add some space below the text
+  },
+};
+
+
 
 const handleDeletePost = async (postId) => {
   console.log(postId);
@@ -93,19 +101,19 @@ const UserActivity = () => {
   return (
     <div>
       <Header />
-      <h1 className="text-2xl font-semibold m-6">User Activity</h1>
+      <h1 className={`text-4xl font-semibold m-8 ${styles.customUnderline}`}>User Activity</h1>
 
       {isLoading && <div>Loading...</div>}
 
       {!isLoading && currentUser ? (
         <div className="flex justify-space-between gap-[4rem]">
           <div className="flex flex-col">
-            <h2 className="text-xl font-semibold m-4">
+            <h2 className="text-xl font-semibold m-8">
               Posts Authored by {currentUser.displayName}
             </h2>
             <ul>
               {userPosts.map((post) => (
-                <div key={post.id} className="border p-4 m-4">
+                <div key={post.id} className="border p-4 m-8">
                   <p className="text-lg">{post.data().title}</p>
                   <div className="mt-2">
                     <Image
@@ -119,7 +127,7 @@ const UserActivity = () => {
                   </div>
                   {currentUser && (
                     <button
-                      className="bg-red-500 text-white py-2 px-4 rounded mt-2"
+                      className="bg-blue-500 text-white py-2 px-10 rounded mt-2"
                       onClick={() => {
                         handleDeletePost(post.id);
                       }}
@@ -142,7 +150,7 @@ const UserActivity = () => {
                   <p className="text-lg">{comment.data().text}</p>
                   {currentUser && (
                     <button
-                      className="bg-red-500 text-white py-2 px-4 rounded mt-2"
+                      className="bg-blue-500 text-white  font-semi-bold py-2 px-4 rounded mt-2"
                       onClick={() => {
                         console.log("comment:", comment.id);
                         handleDeleteComment(comment.id);

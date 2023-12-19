@@ -63,7 +63,7 @@ const Header = () => {
     <div className={styles.wrapper}>
       <div className={styles.content}>
         <div className={styles.logoContainer}>
-            <Image src={smallLogo} height={50} width={50} />
+            <Image src={smallLogo} height={50} width={50} alt="headerImg" />
           <Link href={"/"}>
             <h1 className={styles.mainTitle}>WisdomWeave</h1>
           </Link>

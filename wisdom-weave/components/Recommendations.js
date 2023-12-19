@@ -46,6 +46,7 @@ const Recommendations = ({ author, filteredPosts, post }) => {
             src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
             height={100}
             width={100}
+            alt="authorImg"
           />
         </div>
         <div className={styles.authorName}>{author.data?.name}</div>
@@ -61,55 +62,51 @@ const Recommendations = ({ author, filteredPosts, post }) => {
       </div>
 
       <div className={styles.recommendationContainer}>
-        {authorPosts.length === 0
-          ? null
-          : authorPosts.map((post) => (
-              <div>
-                <div className={styles.title}>
-                  More from {author.data?.name}
-                </div>
-                <div className={styles.articlesContainer}>
-                  <div className={styles.articleContentWrapper} key={post.id}>
-                    <div className={styles.articleContent}>
-                      <div className={styles.recommendationAuthorContainer}>
-                        <div
-                          className={
-                            styles.recommendationAuthorProfileImageContainer
-                          }
-                        >
-                          <Image
-                            src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
-                            alt="author image"
-                            height={100}
-                            width={100}
-                          />
-                        </div>
-                        <div className={styles.recommendationAuthorName}>
-                          {author.data?.name}
-                        </div>
+        {authorPosts.length === 0 ? null : (
+          <div>
+            <div className={styles.title}>More from {author.data?.name}</div>
+            <div className={styles.articlesContainer}>
+              {authorPosts.map((post) => (
+                <div className={styles.articleContentWrapper} key={post.id}>
+                  <div className={styles.articleContent}>
+                    <div className={styles.recommendationAuthorContainer}>
+                      <div
+                        className={
+                          styles.recommendationAuthorProfileImageContainer
+                        }
+                      >
+                        <Image
+                          src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${author.data?.imageURL}`}
+                          alt="author image"
+                          height={100}
+                          width={100}
+                        />
                       </div>
-                      <Link href={`/post/${post.id}`} as={`/post/${post.id}`}>
-                        <div className={styles.recommendationTitle}>
-                          {post.data.title}
-                        </div>
-                      </Link>
+                      <div className={styles.recommendationAuthorName}>
+                        {author.data?.name}
+                      </div>
                     </div>
-                    <div className={styles.recommendationThumbnailContainer}>
-                      <Image
-                        src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.data.bannerImage}`}
-                        height={100}
-                        width={100}
-                        alt="thumbnail"
-                      />
-                    </div>
+                    <Link href={`/post/${post.id}`} as={`/post/${post.id}`}>
+                      <div className={styles.recommendationTitle}>
+                        {post.data.title}
+                      </div>
+                    </Link>
+                  </div>
+                  <div className={styles.recommendationThumbnailContainer}>
+                    <Image
+                      src={`https://res.cloudinary.com/dcq1kcego/image/fetch/${post.data.bannerImage}`}
+                      height={100}
+                      width={100}
+                      alt="thumbnail"
+                    />
                   </div>
                 </div>
-              </div>
-            ))}
-        <div className={styles.commentsContainer}>
-          <div className={styles.title}>
-            Comments
+              ))}
+            </div>
           </div>
+        )}
+        <div className={styles.commentsContainer}>
+          <div className={styles.title}>Comments</div>
           <Comment postId={post.id} currentUser={currentUser} />
         </div>
       </div>
